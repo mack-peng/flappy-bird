@@ -1,0 +1,168 @@
+.bird_bg {
+  background: url("@image/snake/geometry.png");
+  height: 100vh;
+  height: 100dvh;
+}
+
+.sidebar_h3 {
+  text-align: center;
+}
+
+.spaceTip {
+  padding-top: 20px;
+  text-align: center;
+}
+
+@keyframes birdBgMove {
+  0% {
+    background-position: 0;
+  }
+
+  100% {
+    background-position: -100%;
+  }
+}
+
+.game_layout {
+  width: min(1000px, 92vw);
+  aspect-ratio: 1000 / 530;
+  margin: 20px auto;
+}
+
+/* 逻辑坐标固定 1000x530，视觉等比缩放（--k 由 JS 写入） */
+.scaler {
+  width: 1000px;
+  height: 530px;
+  transform-origin: top left;
+  transform: scale(var(--k, 1));
+}
+
+.land {
+  height: 50px;
+  background: url("@image/bird/land.png");
+}
+
+.bird_box {
+  height: 480px;
+  background: url("@image/bird/sky.png");
+  background-position: center center;
+  position: relative;
+  animation: birdBgMove 5s infinite linear;
+  overflow: hidden;
+}
+
+.bird {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+}
+
+.birdJump {
+  animation: birdJump 0.3s;
+}
+
+@keyframes birdJump {
+  0% {
+    transform: rotate(30deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.birdRoate {
+  animation: birdRotate 1.3s;
+}
+
+@keyframes birdRotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(90deg);
+  }
+}
+
+.birdWing {
+  width: 100%;
+  height: 100%;
+  animation: birdWing 0.5s infinite;
+}
+
+@keyframes birdWing {
+  0% {
+    background: url("@image/bird/bird2.png") center center;
+    background-size: 195% 195%;
+  }
+
+  33% {
+    background: url("@image/bird/bird0.png") center center;
+    background-size: 195% 195%;
+  }
+
+  66% {
+    background: url("@image/bird/bird1.png") center center;
+    background-size: 195% 195%;
+  }
+
+  100% {
+    background: url("@image/bird/bird2.png") center center;
+    background-size: 195% 195%;
+  }
+}
+
+.pipFar {
+  width: 52px;
+  height: 100%;
+  position: absolute;
+  user-select: none;
+}
+
+.pipe {
+  position: absolute;
+  left: 0;
+  border: 0;
+}
+
+.success_img {
+  border: 0;
+  position: absolute;
+}
+
+.bird_h3 {
+  padding-top: 150px;
+  font-size: 50px;
+  color: rgb(50, 56, 53);
+  line-height: 100px;
+  text-align: center;
+  letter-spacing: 10px;
+}
+
+.scoreTip {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.birdScoreSpan {
+  padding: 10px;
+}
+
+@media (max-width: 767.98px) {
+  .bird_bg {
+    height: auto;
+    overflow: visible;
+  }
+
+  .noScroll {
+    height: auto;
+    overflow: visible;
+  }
+
+  .bird_h3 {
+    font-size: 28px;
+    padding-top: 60px;
+    line-height: 56px;
+  }
+}
