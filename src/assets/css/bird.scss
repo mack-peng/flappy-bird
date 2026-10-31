@@ -4,11 +4,11 @@
 
 @keyframes birdBgMove {
   0% {
-    background-position: 0;
+    background-position-x: 0;
   }
 
   100% {
-    background-position: -100%;
+    background-position-x: -100%;
   }
 }
 
@@ -18,10 +18,25 @@
   position: relative;
 }
 
-/* 逻辑坐标固定 1000x530，视觉等比缩放（--k 由 JS 写入） */
+/* 平板竖版舞台（设计稿 5:6），游戏区更高 */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .game_layout {
+    aspect-ratio: 5 / 6;
+  }
+}
+
+/* 手机竖版舞台（设计稿 3:4） */
+@media (max-width: 767.98px) {
+  .game_layout {
+    aspect-ratio: 3 / 4;
+    margin: 12px auto;
+  }
+}
+
+/* 逻辑坐标宽度固定 1000px，高度随舞台比例弹性（除以缩放比保持铺满） */
 .scaler {
   width: 1000px;
-  height: 530px;
+  height: calc(100% / var(--k, 1));
   transform-origin: top left;
   transform: scale(var(--k, 1));
 }
@@ -32,9 +47,11 @@
 }
 
 .bird_box {
-  height: 480px;
-  background: url("@image/bird/sky.png");
-  background-position: center center;
+  height: calc(100% - 50px);
+  background-color: #4ec0ca;
+  background-image: url("@image/bird/sky.png");
+  background-repeat: repeat-x;
+  background-position: 0 bottom;
   position: relative;
   animation: birdBgMove 5s infinite linear;
   overflow: hidden;
