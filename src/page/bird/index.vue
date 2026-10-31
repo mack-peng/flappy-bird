@@ -213,12 +213,17 @@ export default {
      * 响应式缩放：JS 逻辑坐标固定 1000x530，视觉等比缩放
      */
     updateScale() {
-      const { birdLayout, scaler } = this.$refs;
+      const { birdLayout, scaler, birdBox } = this.$refs;
       if (!birdLayout || !scaler) return;
       scaler.style.setProperty(
         "--k",
         (birdLayout.clientWidth / 1000).toFixed(4)
       );
+      // 物理随舞台逻辑高度适配：跳跃行程保持舞台高度的固定比例（约 7.5%），
+      // 避免高舞台（平板/手机）下相对跳跃能力变小
+      if (birdBox && birdBox.offsetHeight > 0) {
+        this.AS = Math.round(500 * (530 / birdBox.offsetHeight));
+      }
     },
 
     /**
