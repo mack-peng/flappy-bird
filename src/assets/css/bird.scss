@@ -1,16 +1,5 @@
 .bird_bg {
-  background: url("@image/snake/geometry.png");
-  height: 100vh;
-  height: 100dvh;
-}
-
-.sidebar_h3 {
-  text-align: center;
-}
-
-.spaceTip {
-  padding-top: 20px;
-  text-align: center;
+  /* 背景由 Rain 组件与 page-shell 压暗层提供 */
 }
 
 @keyframes birdBgMove {
@@ -24,9 +13,8 @@
 }
 
 .game_layout {
-  width: min(1000px, 100%);
+  width: min(1040px, calc(100vw - 28px));
   aspect-ratio: 1000 / 530;
-  margin: 20px auto;
   position: relative;
 }
 
@@ -130,50 +118,33 @@
 .success_img {
   border: 0;
   position: absolute;
+  z-index: 2;
 }
 
-/* 开始提示层：位于缩放层之外，字号不随舞台缩放 */
-.bird_h3 {
+/* 开始遮罩：现代 CTA，位于缩放层外，字号不随舞台缩放 */
+.start-overlay {
   position: absolute;
-  inset: 0 0 50px 0;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 14px;
   align-items: center;
-  font-size: clamp(20px, 4.5vw, 50px);
-  color: rgb(50, 56, 53);
-  line-height: 1.9;
-  text-align: center;
-  letter-spacing: 0.2em;
-  pointer-events: none;
-}
-
-.scoreTip {
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 4px 12px;
-  padding-top: 10px;
+  background: rgba(8, 12, 24, 0.4);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 3;
 }
 
-.birdScoreSpan {
-  padding: 0;
+.start-btn {
+  font-size: 18px;
+  padding: 12px 34px;
+  letter-spacing: 4px;
 }
 
-@media (max-width: 767.98px) {
-  .bird_bg {
-    height: auto;
-    overflow: visible;
-  }
-
-  .noScroll {
-    height: auto;
-    overflow: visible;
-  }
-
-  .bird_h3 {
-    font-size: 28px;
-    padding-top: 60px;
-    line-height: 56px;
-  }
+.start-hint {
+  color: var(--ui-text);
+  opacity: 0.8;
+  font-size: 14px;
+  margin: 0;
 }

@@ -1,158 +1,80 @@
 <template>
-  <div class="bird_bg">
-    <div class="w1440 noScroll">
-      <div
-        class="paper game-paper"
-        v-first="{
-          name: 'translateRight',
-          duration: '0.4s',
-          delay: '0.5s',
-          offset: '0',
-        }"
-      >
-        <div class="config-select-bar">
-              <ConfigSelect
-                title="难度"
-                :options="difficultyOptions"
-                @apply="sideBarMethod"
-              />
-            </div>
-            <div
-              class="spaceTip"
-              v-first="{
-                name: 'translateRight',
-                duration: '0.4s',
-                delay: '0.7s',
-                offset: '0',
-              }"
-            >
-              {{
-                `空格键或点击屏幕开始（Space / Tap） 当前得分（Count）：${successCount}分`
-              }}
-            </div>
-            <div
-              class="scoreTip"
-              v-first="{
-                name: 'translateRight',
-                duration: '0.4s',
-                delay: '0.8s',
-                offset: '0',
-              }"
-            >
-              <span
-                class="birdScoreSpan"
-                v-for="(item, idx) in birdScore"
-                :key="idx"
-                v-first="{
-                  name: 'translateRight',
-                  duration: '0.5s',
-                  delay: `${0.9 + idx * 0.2}s`,
-                  offset: '0',
-                }"
-                >{{ item }}</span
-              >
-            </div>
-            <div
-              class="game_layout"
-              ref="birdLayout"
-              v-first="{
-                name: 'translateRight',
-                duration: '0.4s',
-                delay: '0.9s',
-                offset: '0',
-              }"
-            >
-              <div class="scaler" ref="scaler">
-                <div
-                  class="bird_box"
-                  ref="birdBox"
-                  @mousedown="onStageTap"
-                  @touchstart.prevent="onStageTap"
-                >
-                  <transition name="alanAlert">
-                    <img
-                      v-show="successTip.isShow"
-                      :style="successAttr"
-                      class="success_img"
-                      src="../../assets/img/bird/success.png"
-                      alt
-                    />
-                  </transition>
-                  <div
-                    :class="{
-                      birdRoate: birdData.sports == 'fall',
-                      birdJump: birdData.sports == 'jump',
-                    }"
-                    class="bird"
-                    ref="bird"
-                    :style="birdAttr"
-                  >
-                    <div class="birdWing"></div>
-                  </div>
-                  <div
-                    class="pipFar"
-                    v-for="(item, idx) in pipeArr"
-                    :key="idx"
-                    :style="{ right: item.right + 'px' }"
-                  >
-                    <img
-                      class="pipe"
-                      :src="item.topPipeSrc"
-                      :style="{ top: item.topPipeTop + 'px' }"
-                      alt
-                    />
-                    <img
-                      class="pipe"
-                      :src="item.bottomPipeSrc"
-                      :style="{ top: item.bottomPipeTop + 'px' }"
-                      alt
-                    />
-                  </div>
-                </div>
-                <div
-                  class="land"
-                  v-first="{
-                    name: 'alanAlertIn',
-                    duration: '0.5s',
-                    delay: '1.1s',
-                    offset: '0',
-                  }"
-                ></div>
-              </div>
-              <transition name="alanAlert">
-                <div class="bird_h3" v-if="!isStart">
-                  <span
-                    v-first="{
-                      name: 'translateTop',
-                      duration: '0.5s',
-                      delay: '1.4s',
-                      offset: '0',
-                    }"
-                    >Game Start!!!</span
-                  >
-                  <br />
-                  <span
-                    v-first="{
-                      name: 'translateTop',
-                      duration: '0.5s',
-                      delay: '1.6s',
-                      offset: '0',
-                    }"
-                    >Just do it!Foolish guys!</span
-                  >
-                </div>
-              </transition>
-            </div>
+  <div class="bird_bg page-shell">
+    <header class="hud">
+      <div class="hud_title">管道小鸟 Flappy Bird</div>
+      <span class="chip">得分 {{ successCount }}</span>
+      <span class="chip">最高（{{ currentMode }}）{{ birdBestScore[currentMode] }}分</span>
+      <div class="hud_spacer"></div>
+      <ConfigSelect title="难度" :options="difficultyOptions" @apply="sideBarMethod" />
+    </header>
+    <main class="game_layout stage-panel" ref="birdLayout">
+      <div class="scaler" ref="scaler">
+        <div
+          class="bird_box"
+          ref="birdBox"
+          @mousedown="onStageTap"
+          @touchstart.prevent="onStageTap"
+        >
+          <transition name="alanAlert">
+            <img
+              v-show="successTip.isShow"
+              :style="successAttr"
+              class="success_img"
+              src="../../assets/img/bird/success.png"
+              alt
+            />
+          </transition>
+          <div
+            :class="{
+              birdRoate: birdData.sports == 'fall',
+              birdJump: birdData.sports == 'jump',
+            }"
+            class="bird"
+            ref="bird"
+            :style="birdAttr"
+          >
+            <div class="birdWing"></div>
+          </div>
+          <div
+            class="pipFar"
+            v-for="(item, idx) in pipeArr"
+            :key="idx"
+            :style="{ right: item.right + 'px' }"
+          >
+            <img
+              class="pipe"
+              :src="item.topPipeSrc"
+              :style="{ top: item.topPipeTop + 'px' }"
+              alt
+            />
+            <img
+              class="pipe"
+              :src="item.bottomPipeSrc"
+              :style="{ top: item.bottomPipeTop + 'px' }"
+              alt
+            />
           </div>
         </div>
+        <div class="land"></div>
       </div>
+      <transition name="fade">
+        <div class="start-overlay" v-if="!isStart">
+          <button class="btn btn--accent start-btn" @click.stop="onStageTap">
+            开 始 游 戏
+          </button>
+          <p class="start-hint">空格键 / 点击屏幕跳跃</p>
+        </div>
+      </transition>
+    </main>
+  </div>
+</template>
 </template>
 
 <script>
 import pipeTopImg from "@image/bird/pipeTop.png";
 import pipeBottomImg from "@image/bird/pipeBottom.png";
 import { BIRD } from "@constants";
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import { $animate } from "../../mixins/index.js";
 import { COMMIT } from "../../utils/index.js";
 import ConfigSelect from "../../components/ConfigSelect.vue";
@@ -214,7 +136,6 @@ export default {
       };
     },
     ...mapState(["birdBestScore"]),
-    ...mapGetters(["birdScore"]),
   },
   methods: {
     /**
