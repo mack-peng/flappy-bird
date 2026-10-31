@@ -410,5 +410,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@style/bird.scss";
+@use "@style/bird.scss";
 </style>
