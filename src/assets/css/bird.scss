@@ -12,23 +12,23 @@
   }
 }
 
+/* 舞台高度随屏宽连续变化（分段线性，边界处等高无跳变）：
+ * ≥1024: 0.53 × 可用宽（封顶 551）· 768–1023: 888 → 528 线性 · ≤767: 463 → 888 线性 */
 .game_layout {
-  width: min(1040px, calc(100vw - 28px));
-  aspect-ratio: 1000 / 530;
+  width: min(1040px, calc(100vw - clamp(16px, 3vw, 28px)));
+  height: min(calc((100vw - 28px) * 0.53), 551px);
   position: relative;
 }
 
-/* 平板竖版舞台（设计稿 5:6），游戏区更高 */
-@media (min-width: 768px) and (max-width: 1023.98px) {
+@media (max-width: 1023.98px) and (min-width: 768px) {
   .game_layout {
-    aspect-ratio: 5 / 6;
+    height: calc(1968px - 140.6vw);
   }
 }
 
-/* 手机竖版舞台（设计稿 3:4） */
 @media (max-width: 767.98px) {
   .game_layout {
-    aspect-ratio: 3 / 4;
+    height: calc(108.1vw + 57.6px);
     margin: 12px auto;
   }
 }
@@ -154,14 +154,14 @@
 }
 
 .start-btn {
-  font-size: 18px;
-  padding: 12px 34px;
-  letter-spacing: 4px;
+  font-size: clamp(14px, 1.8vw, 18px);
+  padding: clamp(9px, 1.2vw, 12px) clamp(22px, 3.4vw, 34px);
+  letter-spacing: clamp(2px, 0.4vw, 4px);
 }
 
 .start-hint {
   color: var(--ui-text);
   opacity: 0.8;
-  font-size: 14px;
+  font-size: clamp(12px, 1.4vw, 14px);
   margin: 0;
 }
