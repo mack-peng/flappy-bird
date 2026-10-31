@@ -27,6 +27,7 @@
   width: min(1000px, 100%);
   aspect-ratio: 1000 / 530;
   margin: 20px auto;
+  position: relative;
 }
 
 /* 逻辑坐标固定 1000x530，视觉等比缩放（--k 由 JS 写入） */
@@ -131,22 +132,32 @@
   position: absolute;
 }
 
+/* 开始提示层：位于缩放层之外，字号不随舞台缩放 */
 .bird_h3 {
-  padding-top: 150px;
-  font-size: 50px;
+  position: absolute;
+  inset: 0 0 50px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(20px, 4.5vw, 50px);
   color: rgb(50, 56, 53);
-  line-height: 100px;
+  line-height: 1.9;
   text-align: center;
-  letter-spacing: 10px;
+  letter-spacing: 0.2em;
+  pointer-events: none;
 }
 
 .scoreTip {
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 12px;
   padding-top: 10px;
 }
 
 .birdScoreSpan {
-  padding: 10px;
+  padding: 0;
 }
 
 @media (max-width: 767.98px) {
