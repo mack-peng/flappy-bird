@@ -5,14 +5,11 @@
 :root {
   --ui-text: #e2e8f0;
   --ui-dim: #94a3b8;
-  --ui-panel: rgba(15, 23, 42, 0.55);
+  --ui-panel: rgba(15, 23, 42, 0.8);
   --ui-line: rgba(148, 163, 184, 0.25);
-  --space-hud-y: clamp(8px, 1.2vw, 12px);
-  --space-hud-x: clamp(12px, 2.2vw, 28px);
-  --gap-hud: clamp(6px, 1vw, 12px);
-  --font-title: clamp(16px, 1.55vw, 22px);
-  --font-ui: clamp(12px, 1.1vw, 15px);
-  --font-chip: clamp(12px, 1vw, 14px);
+  --font-title: 22px;
+  --font-ui: 15px;
+  --font-chip: 14px;
 }
 
 .page-shell {
@@ -42,8 +39,8 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--gap-hud);
-  padding: var(--space-hud-y) var(--space-hud-x);
+  gap: 12px;
+  padding: 12px clamp(14px, calc(2.55vw + 4.5px), 24px);
   background: var(--ui-panel);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -54,8 +51,9 @@
 .hud_title {
   font-family: "Patrick Hand SC", cursive;
   font-size: var(--font-title);
+  line-height: 30px;
   letter-spacing: 1px;
-  margin-right: clamp(0px, 0.4vw, 6px);
+  margin-right: 6px;
 }
 
 .hud_spacer {
@@ -63,13 +61,26 @@
 }
 
 .chip {
-  padding: clamp(4px, 0.55vw, 6px) clamp(9px, 1.3vw, 14px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 10px;
   border-radius: 999px;
   background: rgba(148, 163, 184, 0.14);
   border: 1px solid var(--ui-line);
   color: var(--ui-text);
   font-size: var(--font-chip);
+  line-height: 1;
   white-space: nowrap;
+}
+
+.chip--score {
+  min-width: 74px;
+}
+
+.chip--best {
+  min-width: 160px;
 }
 
 .btn {
@@ -101,9 +112,9 @@
 }
 
 .select {
-  height: clamp(30px, 4.4vw, 38px);
-  padding: 0 clamp(8px, 1.1vw, 14px);
-  border-radius: clamp(8px, 0.9vw, 10px);
+  height: 38px;
+  padding: 0 10px;
+  border-radius: 10px;
   background: rgba(148, 163, 184, 0.12);
   color: var(--ui-text);
   border: 1px solid var(--ui-line);
@@ -111,6 +122,8 @@
   cursor: pointer;
   font-family: inherit;
   font-size: var(--font-ui);
+  text-align: center;
+  text-align-last: center;
 }
 
 .select option {
@@ -118,11 +131,10 @@
 }
 
 .stage-panel {
-  width: min(1040px, calc(100vw - clamp(16px, 3vw, 28px)));
-  margin: clamp(10px, 2.4vw, 28px) auto;
-  border-radius: clamp(10px, 1.2vw, 16px);
+  width: min(1040px, calc(100vw - 28px));
+  margin: 38px auto;
+  border-radius: clamp(12px, calc(1.1vw + 8px), 16px);
   overflow: hidden;
-  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.65);
 }
 
 .fade-enter-active,
@@ -135,9 +147,84 @@
   opacity: 0;
 }
 
-/* 手机：标题独占一行（布局语义，非尺寸） */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .stage-panel {
+    margin: 37px auto;
+  }
+}
+
+/* 手机竖屏：标题独占一行，得分/最高/难度收进第二行 */
 @media (max-width: 767.98px) {
+  .hud {
+    padding: 10px 14px 8px;
+    gap: 6px;
+  }
+
   .hud_title {
     width: 100%;
+  }
+
+  .stage-panel {
+    margin: 18px auto;
+  }
+}
+
+@media (max-width: 767.98px) and (orientation: portrait) {
+  .chip--best {
+    min-width: 0;
+  }
+
+  .chip-mode {
+    display: none;
+  }
+}
+
+/* 360 起难度与得分/最高同排；更窄回退三行 */
+@media (min-width: 360px) and (max-width: 767.98px) and (orientation: portrait) {
+  .config-select {
+    order: 4;
+    margin-left: auto;
+  }
+
+  .chip--score {
+    order: 1;
+  }
+
+  .chip--best {
+    order: 2;
+  }
+
+  .hud_spacer {
+    display: none;
+  }
+}
+
+/* 手机 / 平板横屏：单行 HUD，舞台占满剩余高度 */
+@media (max-height: 500px) and (max-width: 900px) and (orientation: landscape) {
+  .hud {
+    flex-wrap: nowrap;
+    padding: 9px 16px;
+    gap: 6px;
+  }
+
+  .hud_title {
+    width: auto;
+    margin-right: 0;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .stage-panel {
+    margin: 8px auto;
+  }
+}
+
+@media (max-width: 620px) and (max-height: 500px) and (orientation: landscape) {
+  .hud_title {
+    display: none;
+  }
+
+  .chip {
+    min-width: 0;
   }
 }

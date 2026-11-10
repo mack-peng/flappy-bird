@@ -8,21 +8,13 @@
 
 <script>
 import { mapState } from "vuex";
-const imgs = import.meta.glob("../../assets/img/winOrFail/*.jpg", {
-  eager: true,
-  import: "default",
-});
+import pickCartoon from "../../utils/cartoon.js";
 
 export default {
   computed: {
     imgUrl() {
       const { type } = this.cartoon;
-      if (!type) return;
-      const pool = Object.keys(imgs).filter(k =>
-        k.endsWith(`/${type}_`)
-      );
-      const picked = pool[Math.floor(Math.random() * pool.length)];
-      return imgs[picked];
+      return type ? pickCartoon(type) : "";
     },
     ...mapState(["cartoon"]),
   },

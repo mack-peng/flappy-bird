@@ -1,9 +1,8 @@
 <template>
   <label class="config-select">
     <span class="config-select_title" v-if="title">{{ title }}</span>
-    <select class="select" :value="value" @change="apply($event)">
-      <option disabled value="">-- {{ title }} --</option>
-      <option v-for="o in options" :key="o.label" :value="o">{{ o.label }}</option>
+    <select class="select" :value="value" :aria-label="title" @change="apply">
+      <option v-for="o in options" :key="o.label" :value="o.label">{{ o.label }}</option>
     </select>
   </label>
 </template>
@@ -14,15 +13,12 @@ export default {
   props: {
     title: { type: String, default: "选项" },
     options: { type: Array, required: true },
-  },
-  data() {
-    return { value: "" };
+    value: { type: String, default: "" },
   },
   methods: {
     apply(e) {
-      const item = this.options[e.target.selectedIndex - 1];
+      const item = this.options.find((o) => o.label === e.target.value);
       if (item) {
-        this.value = item;
         this.$emit("apply", item);
       }
     },
@@ -37,32 +33,32 @@ export default {
   gap: 6px;
 }
 .config-select_title {
-  font-size: 14px;
-  color: var(--ui-dim, #94a3b8);
+  display: none;
+}
+.select {
+  width: 160px;
 }
 
-/* 手机/平板 HUD：隐藏外置标签，下拉自适应 */
-@media (max-width: 1023.98px) {
-  .config-select {
-    display: flex;
-    min-width: 0;
-  }
-  .config-select_title {
-    display: none;
-  }
-  .config-select .select {
-    min-width: 0;
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .select {
+    width: 150px;
   }
 }
 
-/* 手机：下拉占满所在行 */
 @media (max-width: 767.98px) {
   .config-select {
-    width: 100%;
+    display: flex;
+    width: auto;
+    min-width: 0;
   }
-  .config-select .select {
-    width: 100%;
-    padding: 0 8px;
+  .select {
+    width: 150px;
+  }
+}
+
+@media (max-height: 500px) and (max-width: 900px) and (orientation: landscape) {
+  .select {
+    width: 140px;
   }
 }
 </style>
