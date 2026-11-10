@@ -373,12 +373,49 @@ export default {
       const cameraX = Math.max(0, birdCenter - viewWidth * 0.32);
       scaler.style.setProperty("--k", k.toFixed(4));
       scaler.style.setProperty("--cam", (-cameraX * k).toFixed(2) + "px");
+      const prevBandTop = this.bandTop;
       this.worldWidth = WORLD_WIDTH;
       this.worldHeight = stageHeight / k - LAND_HEIGHT;
       this.bandTop = Math.max(0, (this.worldHeight - SKY_HEIGHT) / 2);
       if (!this.isStart) {
         this.resetBird();
+        return;
       }
+      this.rebaseWorld(prevBandTop);
+    },
+
+    rebaseWorld(prevBandTop) {
+      const delta = this.bandTop - prevBandTop;
+      const worldHeight = this.worldHeight;
+      const bandBottom = Math.min(this.bandTop + SKY_HEIGHT, worldHeight);
+      const minGapTop = this.bandTop + PIPE_CAP;
+      const maxGapTop = Math.max(
+        minGapTop,
+        bandBottom - this.pipeDist - PIPE_BOTTOM_MARGIN
+      );
+      const wasRunning = this.isStart && !this.wasRunning;
+      this.birdData.top = Math.min(
+        Math.max(this.birdData.top + delta, 0),
+        worldHeight - BIRD_SIZE
+      );
+      if (wasRunning) {
+        const ts = this.TS - this.AS * this.downTime;
+        this.downTime = 0;
+        this.TS = ts;
+        this.birdMove();
+      }
+      this.pipeArr.forEach((pipe) => {
+        const gapTop = Math.min(
+          Math.max(pipe.gapTop + delta, minGapTop),
+          maxGapTop
+        );
+        const gapBottom = gapTop + this.pipeDist;
+        pipe.gapTop = gapTop;
+        pipe.gapBottom = gapBottom;
+        pipe.topPipeHeight = gapTop;
+        pipe.bottomPipeTop = gapBottom;
+        pipe.bottomPipeHeight = worldHeight - gapBottom;
+      });
     },
 
     resetBird() {
